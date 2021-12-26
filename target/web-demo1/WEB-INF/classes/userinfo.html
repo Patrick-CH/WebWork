@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑个人资料</title>
+    <!--media 指定当前屏幕，当最大宽度不超过650时引入这个css-->
+    <link  th:href="@{/css/style_narrow.css}" type="text/css" rel="stylesheet" media="only screen and (max-width:650px)"/>
+    <!--media 指定当前屏幕，当最小宽度超过650时引入这个css-->
+    <link  th:href="@{/css/style_wide.css}" type="text/css" rel="stylesheet" media="only screen and (min-width:650px)"/>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+</head>
+<main>
+    <h3 class="title">编辑个人资料</h3>
+    <div class="box_reg">
+        <form th:action="@{/update_user}" method="post">
+            <input id="username" name="username" required="" type="text" class="input_text" readonly th:value="${session.username}">
+
+            <input id="email" name="email" required = "" type="email" class="input_text" placeholder="电子邮箱">
+
+            <input id="birthday" name="birthday" type="date" class="input_text">
+
+            <input id="balance" name="balance" type="number" class="input_text">
+
+            <input id="submit" name="submit" type="submit" class="button" value="修改">
+        </form>
+    </div>
+    <div id="reg_btn_box" class="box_btn">
+        <button id="back_btn" class="btn" onclick="window.location.href='/web_demo1/'">
+            返回登录界面
+        </button>
+    </div>
+</main>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>文章管理系统</title>
+        <!--media 指定当前屏幕，当最大宽度不超过650时引入这个css-->
+        <link  href="css/style_main_narrow.css" type="text/css" rel="stylesheet" media="only screen and (max-width:650px)"/>
+        <!--media 指定当前屏幕，当最小宽度超过650时引入这个css-->
+        <link  href="css/style_main.css" type="text/css" rel="stylesheet" media="only screen and (min-width:650px)"/>
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+        <script type="text/javascript"  src="js/passage.js"></script>
+    </head>
+    <main>
+        <body>
+            <div class="upper_box" id="main_upper">
+                <img src="img/favicon.ico" class="img_in_upper" id="favicon">
+                <label class="title" id="upper_title">文章管理系统</label>
+                <img src="img/patrick.png" class="img_in_upper" id="patrick">
+            </div>
+            <div class="main_box">
+                <div class="left_menu">
+                    <div class="back_btn"
+                         onclick="window.location.href='/login#'">
+                        主页
+                    </div>
+                    <div>
+                        <div class="item">
+                            <div id="i1" class="header">风格切换 </div>
+                            <div class="menu_list">
+                                <a class="item" href="#" onclick=loadjscssfile('css/change_to_red.css','css')>红色</a>
+                                <a class="item" href="" onclick=loadjscssfile('css/change_to_blue.css','css')> 蓝色</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div id="i2" class="header">用户管理</div>
+                            <div class="menu_list">
+                                <a class="item" th:href="@{/main/userinfo}">个人资料</a>
+                                <a class="item" th:href="@{/main/change_pass}">修改密码</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div id="i3" class="header">文章管理</div>
+                            <div class="menu_list">
+                                <a class="item" th:href="@{/passage}">文章管理</a>
+                                <a class="item" th:href="@{/main/passage_statistic}">统计信息</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content_box">
+                    <label class="welcome" th:text="'欢迎，' + ${session.username}"></label>
+                    <label class="welcome">Welcome to Patrick' site</label>
+                    <div class="table_box" id="user_info">
+                        <div class="search_box">
+                            <input id="search_user" class="input_text" placeholder="请输入作者用户名">
+                            <input id="search_title" class="input_text" placeholder="请输入标题">
+                            <button class="button" id="search_title_btn" onclick="search()">搜索</button>
+                            <button class="button" id="clear_search_btn" onclick="clear_search()">清空条件</button>
+                        </div>
+                        <table>
+                        <tr>
+                            <td>序号</td>
+                            <td>标题</td>
+                            <td>作者</td>
+                            <td>内容</td>
+                            <td>   </td>
+                        </tr>
+                        <tr th:each="passage, pstatus:${passages}">
+                            <td th:id="'no' + ${pstatus.index}" th:text="${passage.id}" hidden></td>
+                            <td th:id="'index' + ${pstatus.index}" th:text="${pstatus.index}"></td>
+                            <td th:id="'title' + ${pstatus.index}" th:text="${passage.title}"></td>
+                            <td th:id="'username' + ${pstatus.index}" th:text="${passage.username}"></td>
+                            <td class="content" th:id="'content' + ${pstatus.index}" th:text="${passage.content}"></td>
+                            <td class="operation_block">
+                                <button class="edit_btn" th:onclick="'editPage(' + ${pstatus.index} +')'">编辑</button>
+                                <button class="del_btn" th:onclick="'delRow(' + ${pstatus.index} +')'">删除</button>
+                            </td>
+                        </tr>
+                        </table>
+                            <div id="box1_btn" class="new_box">
+                                <button class="button" id="new_passage_btn" onclick="window.location.href='http://localhost:8080/web_demo1/main/new_passage'">新建文章</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </body>
+        <footer>
+<!--            <small>2021 © <a href="https://github.com/Patrick-CH" title="Written by CYK">CYK</a> /-->
+<!--                <a href="https://github.com/Patrick-CH/webcompass" title="Fork me on GitHub">GitHub</a> /-->
+<!--            </small>-->
+        </footer>
+    </main>
+</html>

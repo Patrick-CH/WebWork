@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>管理系统</title>
+        <!--media 指定当前屏幕，当最大宽度不超过650时引入这个css-->
+        <link  th:href="@{/css/style_main_narrow.css}" type="text/css" rel="stylesheet" media="only screen and (max-width:650px)"/>
+        <!--media 指定当前屏幕，当最小宽度超过650时引入这个css-->
+        <link  th:href="@{/css/style_main.css}" type="text/css" rel="stylesheet" media="only screen and (min-width:650px)"/>
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+        <script type="text/javascript"  th:src="@{/js/passage.js}"></script>
+        <script src="https://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+        <script src="https://cdn.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+        <script src="https://cdn.highcharts.com.cn/highcharts/modules/oldie.js"></script>
+        <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    </head>
+    <main>
+        <body>
+            <div class="upper_box" id="main_upper">
+                <img th:src="@{/img/favicon.ico}" class="img_in_upper" id="favicon">
+                <label class="title" id="upper_title">文章管理系统</label>
+                <img th:src="@{/img/patrick.png}" class="img_in_upper" id="patrick">
+            </div>
+            <div class="main_box">
+                <div class="left_menu">
+                    <div class="back_btn"
+                         th:onclick="'window.location.href=' + @{/}">
+                        主页
+                    </div>
+                    <div>
+                        <div class="item">
+                            <div id="i1" class="header">风格切换 </div>
+                            <div class="menu_list">
+                                <a class="item" href="#" onclick=loadjscssfile('css/change_to_red.css','css')>红色</a>
+                                <a class="item" href="" onclick=loadjscssfile('css/change_to_blue.css','css')> 蓝色</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div id="i2" class="header">用户管理</div>
+                            <div class="menu_list">
+                                <a class="item" th:href="@{/main/userinfo}">个人资料</a>
+                                <a class="item" th:href="@{/main/change_pass}">修改密码</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div id="i3" class="header" >文章管理</div>
+                            <div class="menu_list">
+                                <a class="item" th:href="@{/passage}">文章管理</a>
+                                <a class="item" th:href="@{/passageStatistic}">统计信息</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content_box">
+                    <label class="welcome" th:text="'欢迎，' + ${session.username}"></label>
+                    <label class="welcome">Welcome to Patrick' site</label>
+                    <div class="table_box" id="user_info">
+                        <table>
+                            <tr>
+                                <td>序号</td>
+                                <td>用户名</td>
+                                <td>文章数量</td>
+                                <td>操作</td>
+                            </tr>
+                            <tr th:each="info, istatus:${infos}">
+                                <td th:id="'no' + ${istatus.index}" th:text="${istatus.index}"></td>
+                                <td th:id="'username' + ${istatus.index}" th:text="${info.username}"></td>
+                                <td th:id="'num' + ${istatus.index}" th:text="${info.passage_num}"></td>
+                                <td class="operation_block">
+                                    <button class="edit_btn" th:onclick="'managePassage(' + ${istatus.index} +')'">进入文章管理</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="line_row"></div>
+                    <div id="container" style="min-width:400px;height:400px"></div>
+                    <script>
+                        var usernames = [];
+                        var nums = [];
+                        for(var i=0; i<5; i++){
+                            var username_tag = document.getElementById("username" + i.toString());
+                            var pnum_tag = document.getElementById("num" + i.toString());
+                            if (username_tag===null){
+                                break;
+                            }
+                            usernames.push(username_tag.textContent);
+                            nums.push(parseInt(pnum_tag.textContent));
+                        }
+                        var chart = Highcharts.chart('container', {
+                            chart: {
+                                type: 'bar'
+                            },
+                            title: {
+                                text: '各用户文章数量'
+                            },
+                            xAxis: {
+                                categories: usernames,
+                                title: {
+                                    text: null
+                                }
+                            },
+                            yAxis: {
+                                min: 0,
+                                title: {
+                                    text: '文章数量(篇)',
+                                    align: 'high'
+                                },
+                                labels: {
+                                    overflow: 'justify'
+                                }
+                            },
+                            tooltip: {
+                                valueSuffix: ' 篇'
+                            },
+                            plotOptions: {
+                                bar: {
+                                    dataLabels: {
+                                        enabled: true,
+                                        allowOverlap: true // 允许数据标签重叠
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: '文章数量',
+                                data: nums
+                            }]
+                        });
+                    </script>
+                </div>
+            </div>
+        </body>
+        <footer>
+            <small>2021 © <a href="https://github.com/Patrick-CH" title="Written by CYK">CYK</a> /
+                <a href="https://github.com/Patrick-CH/webcompass" title="Fork me on GitHub">GitHub</a> /
+            </small>
+        </footer>
+    </main>
+</html>
